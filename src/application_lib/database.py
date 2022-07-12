@@ -18,7 +18,8 @@ def check_for_user(table_name,username):return chech_rows(table_name,'username',
 def no_users(table_name):return empty_table(table_name)
 
 
-def check_username_and_password(username,password):return auth_details('todousers',[username,password])
+def check_username_and_password(username,password):
+    return specific_auth('todousers',["username","password"],[username,password])
 
 def remove_task(table_name,data):
     print(table_name,data)
