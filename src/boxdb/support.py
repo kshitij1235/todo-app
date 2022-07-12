@@ -77,7 +77,7 @@ def get_elements(table_name,column):
     """
     with open(f'.\\{table_name}\\tables\\{column}.txt','r+',encoding="UTF-8") as files:
         line=files.readlines()
-    return [elements.removesuffix('\n').strip() for elements in line]
+    return [elements.strip() for elements in line]
 
 def reformat_file(table_name):
     """
