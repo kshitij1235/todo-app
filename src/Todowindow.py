@@ -84,7 +84,8 @@ class TodoApp:
         button_2.grid(row=10, column=1, pady=10, padx=15, sticky="e")
 
         frames=render_todo(frame_right,data,username)
-        refresh_tasks(frames,frame_right=frame_right,data=data,username=username)
+    
+        refresh_tasks(frames,frame_right=frame_right,data=data,username=username,new_value=entry.get())
         switch_2.select()
         
         # switch between light and darkmode

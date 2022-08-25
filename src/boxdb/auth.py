@@ -48,10 +48,10 @@ def auth_details(table_name, user_details):
     # tally all the data from user and database
     for index, element in enumerate(rows):
         try:
-            final_list.append(read_specific_line(f"{table_name}/tables/{element}.txt", primary_key_element_postion-1) == user_details[index])
+            final_list.append(read_specific_line(f"{table_name}/tables/{element}.txt", primary_key_element_postion-1).strip()
+                              == user_details[index])
         except TypeError:
             return False
-
     return len(user_details) == final_list.count(True)
 
 
@@ -71,7 +71,6 @@ def specific_auth(table_name,rows,user_details):
 
     primary_column_position = rows.index(primary_key)
 
-
     primary_key_element_postion = word_search_line(
         f"./{table_name}/tables/{primary_key}.txt", user_details[primary_column_position])
 
@@ -85,5 +84,4 @@ def specific_auth(table_name,rows,user_details):
 
         except TypeError:
             return False
-
     return len(user_details)==final_list.count(True)

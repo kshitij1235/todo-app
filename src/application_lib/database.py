@@ -1,7 +1,6 @@
 from boxdb import *
 from boxdb.support import get_elements
 from application_lib.todo_handler import render_todo, render_todo
-
 def add_users(table_name,username,password):
     add_row(table_name,[username,password])
     create_project({'name':username})
@@ -30,4 +29,5 @@ def add_task(user,task,frame_right,data):
     from datetime import date
     today = date.today()
     add_row(user,[task.get(),today,"False"])
+    data.append(task.get())
     render_todo(frame_right,data,user)

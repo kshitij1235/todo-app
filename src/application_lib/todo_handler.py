@@ -3,7 +3,6 @@ import customtkinter
 def render_todo(frame_right,data,username):
     from application_lib.app_handler import button_event
     frames=[]
-
     for i in range(len(data)):
         frame_info = customtkinter.CTkFrame(master=frame_right, height=10)
         frames.append(frame_info)

@@ -39,10 +39,14 @@ def button_event(button__,frames,data,frame_ava,user):
 def refresh_tasks(frames,
 frame_right,
 data,
-username):
+username,
+new_value):
 
     for i in frames:
         i.destroy()
+        
+    if new_value !="":
+        data.append(new_value)
 
     render_todo(frame_right,
     data,
