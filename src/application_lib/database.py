@@ -31,3 +31,4 @@ def add_task(user,task,frame_right,data):
     add_row(user,[task.get(),today,"False"])
     data.append(task.get())
     render_todo(frame_right,data,user)
+    
