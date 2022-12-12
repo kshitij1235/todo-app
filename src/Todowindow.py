@@ -38,9 +38,10 @@ class TodoApp:
         v = Scrollbar(master)
         v.grid(row=0, column=1, sticky='nse')
 
-        frame_right = customtkinter.CTkFrame(master=master,yscrollcommand = v.set)
+        frame_right = customtkinter.CTkFrame(master)
         frame_right.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
 
+    
 
 
         # # ============ frame_left ============
@@ -73,8 +74,7 @@ class TodoApp:
 
         # ============ frame_right ============
         entry = customtkinter.CTkEntry(master=master,
-                                       width=450,
-                                       placeholder_text="Task")
+                                       width=450)
         entry.grid(row=10, column=1, pady=10, padx=20, sticky="w")
 
 
@@ -93,12 +93,7 @@ class TodoApp:
         button_2.grid(row=10, column=1, pady=10, padx=15, sticky="e")
 
 
-        refresh_tasks(frames,frame_right=frame_right,data=data,username=username)
-
-        
-        v.config( command = frame_right.yview )
-
-     
+        frames = refresh_tasks(frames,frame_right=frame_right,data=data,username=username)
 
         switch_2.select()
         

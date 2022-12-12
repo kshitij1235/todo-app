@@ -1,6 +1,7 @@
 from boxdb import *
 from boxdb.support import get_elements
 from application_lib.todo_handler import render_todo, render_todo,render_specific_todo
+from tkinter import END
 
 def add_users(table_name,username,password):
     add_row(table_name,[username,password])
@@ -22,24 +23,30 @@ def check_username_and_password(username,password):
     return specific_auth('todousers',["username","password"],[username,password])
 
 def remove_task(table_name,data):
-    print(table_name,data)
-    remove_row(table_name,"task",data)
+    return remove_row(table_name,"task",data)
 
 def get_tasks(user):return get_elements(user,'task')
 
 def add_task(user,task,frame_right,previous_tasks,frames):
     from application_lib import refresh_tasks
     from datetime import date
+
+    # if len(task.get()) == 0 :
+    #     print("wrong task")
+    #     return
     
     # add data to database
     today = date.today()
-    add_row(user,[task.get(),today,"False"])
+    if add_row(user,[task.get(),today,"False"]):
 
-    previous_tasks.append(task.get())
-    frames=render_todo(frame_right,previous_tasks,user)
+        # create new sets of frame 
+        frame_new=render_specific_todo(frame_right,task.get(),user,len(frames))
+        frames.append(frame_new)
+        
+        # previous_tasks.append(task.get())
+        # frames=render_todo(frame_right,previous_tasks,user)
 
-    # create new sets of frame 
-    # frame_new=render_specific_todo(frame_right,task.get(),user,len(frames))
-    # frames.append(frame_new)
+    task.delete(0,END)
+
     
     refresh_tasks(frames,frame_right=frame_right,data=previous_tasks,username=user)

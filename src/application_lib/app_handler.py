@@ -12,15 +12,24 @@ def regular_quitter(master):
     master.destroy()
     sys.exit("quitting")
 
+#FIXME cannot get the rigth values
 
 def button_event(button__,frames,data,frame_ava,user):
+    
+    if isinstance(data,str):
+        if button__ in frames:
+            if remove_task(user,data): 
+                button__.destroy()  
+                frames.remove(button__)
+
+    
     if button__ in frames:
         target=data[frames.index(button__)]
-        remove_task(user,target)
-        button__.destroy()
+        if remove_task(user,target): 
+            button__.destroy()  
+            data.remove(data[frames.index(button__)])
+            frames.remove(button__)
 
-    data.remove(data[frames.index(button__)])
-    frames.remove(button__)
     if data == []:
         from application_lib import rgbtohex
         label_info_1 = tk.Label(master=frame_ava,
@@ -39,7 +48,8 @@ def refresh_tasks(frames,
 frame_right,
 data,
 username):
-    for i in frames:
+    cleaned = [item for item in frames if not isinstance(item,list)]
+    for i in cleaned:
         i.destroy()
 
     render_todo(frame_right,
