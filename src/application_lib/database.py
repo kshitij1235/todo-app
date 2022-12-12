@@ -1,6 +1,6 @@
 from boxdb import *
 from boxdb.support import get_elements
-from application_lib.todo_handler import render_todo, render_todo
+from application_lib.todo_handler import render_todo, render_todo,render_specific_todo
 
 def add_users(table_name,username,password):
     add_row(table_name,[username,password])
@@ -27,8 +27,19 @@ def remove_task(table_name,data):
 
 def get_tasks(user):return get_elements(user,'task')
 
-def add_task(user,task,frame_right,data):
+def add_task(user,task,frame_right,previous_tasks,frames):
+    from application_lib import refresh_tasks
     from datetime import date
+    
+    # add data to database
     today = date.today()
     add_row(user,[task.get(),today,"False"])
-    render_todo(frame_right,data,user)
+
+    previous_tasks.append(task.get())
+    frames=render_todo(frame_right,previous_tasks,user)
+
+    # create new sets of frame 
+    # frame_new=render_specific_todo(frame_right,task.get(),user,len(frames))
+    # frames.append(frame_new)
+    
+    refresh_tasks(frames,frame_right=frame_right,data=previous_tasks,username=user)

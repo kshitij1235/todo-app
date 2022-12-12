@@ -8,7 +8,7 @@ def quitter(e, master):
     master.destroy()
     sys.exit()
 
-def regular_quitter(master,threading):
+def regular_quitter(master):
     master.destroy()
     sys.exit("quitting")
 
@@ -16,7 +16,6 @@ def regular_quitter(master,threading):
 def button_event(button__,frames,data,frame_ava,user):
     if button__ in frames:
         target=data[frames.index(button__)]
-        print(target)
         remove_task(user,target)
         button__.destroy()
 
@@ -40,7 +39,6 @@ def refresh_tasks(frames,
 frame_right,
 data,
 username):
-
     for i in frames:
         i.destroy()
 

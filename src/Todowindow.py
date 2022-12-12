@@ -3,11 +3,12 @@ This app window is the main application file
 
 """
 import tkinter
+from tkinter import ttk
 from tkinter import *
 import tkinter.messagebox
 import customtkinter
 from application_lib import rgbtohex,regular_quitter
-from application_lib import render_todo
+from application_lib import render_todo,titlebar
 from application_lib import add_task,refresh_tasks
 
 global frames
@@ -17,11 +18,9 @@ frames = []
 class TodoApp:
     def __init__(self, master,username,data):
         super().__init__()
-
-
         # initalize the applicatin settings s
         self.user = tkinter.PhotoImage(file='src/content/user.png')
-        master.title(f"Todo: {username}")
+
         master.geometry("780x520") 
         master.protocol("WM_DELETE_WINDOW",lambda args=master:regular_quitter(args))
         master.config(bg=rgbtohex(33,35,37))
@@ -36,7 +35,10 @@ class TodoApp:
                                                  corner_radius=0)
         frame_left.grid(row=0, column=0, sticky="nswe")
 
-        frame_right = customtkinter.CTkFrame(master=master)
+        v = Scrollbar(master)
+        v.grid(row=0, column=1, sticky='nse')
+
+        frame_right = customtkinter.CTkFrame(master=master,yscrollcommand = v.set)
         frame_right.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
 
 
@@ -75,32 +77,45 @@ class TodoApp:
                                        placeholder_text="Task")
         entry.grid(row=10, column=1, pady=10, padx=20, sticky="w")
 
+
+        frames=render_todo(frame_right,data,username)
+
         button_2 = customtkinter.CTkButton(master=master,
                                           text="Add",
                                           width=100,
                                           fg_color=rgbtohex(63, 139, 254),
-                                          command=lambda arg=username,arg2=entry,arg3=frame_right,arg4=data:add_task(arg,arg2,arg3,arg4)
+                                          command=lambda Username=username,
+                                          Task_text_box=entry,
+                                          Frame_right=frame_right,
+                                          new_data=data,
+                                          Previous_frames=frames:add_task(Username,Task_text_box,Frame_right,new_data,Previous_frames)
                                           )
         button_2.grid(row=10, column=1, pady=10, padx=15, sticky="e")
 
-        frames=render_todo(frame_right,data,username)
+
         refresh_tasks(frames,frame_right=frame_right,data=data,username=username)
+
+        
+        v.config( command = frame_right.yview )
+
+     
+
         switch_2.select()
         
         # switch between light and darkmode
         import threading
-        t1=threading.Thread(target=lambda switch=switch_2 : checks(switch),daemon=True)
+        t1=threading.Thread(target=lambda switch=switch_2 ,master = master: checks(switch,master),daemon=True)
         t1.start()
 
-        master.protocol("WM_DELETE_WINDOW",lambda app=master ,thread1=t1: regular_quitter(app,thread1))
+        master.protocol("WM_DELETE_WINDOW",lambda app=master: regular_quitter(app))
 
-def checks(switch_2):
+def checks(switch_2,master):
     from time import sleep
     while True:    
-        change_mode(switch_2)
+        change_mode(switch_2,master)
         sleep(1)
 
-def change_mode(switch_2):
+def change_mode(switch_2,master):
     """
     Light mode and dark mode
     """
@@ -108,6 +123,7 @@ def change_mode(switch_2):
         customtkinter.set_appearance_mode("dark")
     else:
         customtkinter.set_appearance_mode("light")
+        master.config(bg=rgbtohex(120, 120, 120))
 
 def Todo_window(root,username,data):
     """
