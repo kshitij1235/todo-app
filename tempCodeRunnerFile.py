@@ -1,1 +1,0 @@
-yscrollcommand = scroll_bar.set 
