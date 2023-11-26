@@ -1,0 +1,33 @@
+ERROR:COLUMN: Unsupported datatype
+ERROR:COLUMN: Unsupported datatype
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType int required for 2023-11-24
+ERROR:CHECKUP: DataType int required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24 False
+ERROR:CHECKUP: DataType string required for eat
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:CHECKUP: DataType string required for 2023-11-24
+ERROR:ROW: Imblance number of rows
+ERROR:ROW: Imblance number of rows had column ['task', 'data', 'status'] but you gave 45
+ERROR:ROW: Imblance number of rows had column 3 but you gave ['[', "'", 'e', 'a', 't', "'", ',', ' ', 'd', 'a', 't', 'e', 't', 'i', 'm', 'e', '.', 'd', 'a', 't', 'e', '(', '2', '0', '2', '3', ',', ' ', '1', '1', ',', ' ', '2', '4', ')', ',', ' ', "'", 'F', 'a', 'l', 's', 'e', "'", ']']
+ERROR:CHECKUP: DataType string required for 2023-11-24

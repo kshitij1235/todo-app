@@ -1,0 +1,4 @@
+{ 
+ username : str
+ password : str
+}

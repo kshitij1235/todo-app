@@ -18,10 +18,22 @@ def render_todo(frame_right,data,username):
         label_info_1 = customtkinter.CTkLabel(master=frame_info,
                                               text=data[i],
                                               )
-        label_info_1.grid(
-            column=0, row=0, sticky="nw", padx=10, pady=10)
+        label_info_1.grid(column=0, 
+                        row=0, 
+                        sticky="nw", 
+                        padx=10, 
+                        pady=10)
+        date_time = customtkinter.CTkLabel(master=frame_info,
+                                              text=data[i],
+                                              )
+        date_time.grid(column=0, 
+                        row=0, 
+                        sticky="ns", 
+                        padx=10, 
+                        pady=10)
   
-       
+
+
         button_3 = customtkinter.CTkButton(master=frame_info,
                                            text="Delete",
                                            fg_color=("gray30"),

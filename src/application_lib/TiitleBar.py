@@ -11,6 +11,7 @@ def titlebar(master,close_icon):
     title_bar.bind("<B1-Motion>", lambda event, arg=master:move_app(event, arg))
     app_name = tk.Label(title_bar, text="Login",
                         bg=rgbtohex(r=53,b=50,g=50), foreground="white")
+    
     app_name.pack(side=tk.LEFT,pady=2,padx=5)
     close = tk.Label(title_bar, image=close_icon,
                      bg=rgbtohex(r=53, b=50, g=50))

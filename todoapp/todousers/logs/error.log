@@ -1,0 +1,10 @@
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:TABLE : table is empty
+ERROR:ROW: Imblance number of rows had column 2 but you gave ['asdas', 'asdasd', 'dasdasdas']
+ERROR:PRIMARY KEY : kshitij exits in the username
+ERROR:ROW: Imblance number of rows had column 2 but you gave ['hello']

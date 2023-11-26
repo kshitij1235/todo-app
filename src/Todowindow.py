@@ -20,7 +20,7 @@ class TodoApp:
         super().__init__()
         # initalize the applicatin settings s
         self.user = tkinter.PhotoImage(file='src/content/user.png')
-
+        master.title(f"todo : {username}")
         master.geometry("780x520") 
         master.protocol("WM_DELETE_WINDOW",lambda args=master:regular_quitter(args))
         master.config(bg=rgbtohex(33,35,37))
@@ -51,13 +51,12 @@ class TodoApp:
         frame_left.grid_rowconfigure(11, minsize=10)
 
         label_1 = customtkinter.CTkLabel(master=frame_left,
-                                              image=self.user,
+                                              image=self.user,text=""
                                               )
         label_1.grid(row=1, column=0, pady=10, padx=10)
 
         label_1 = customtkinter.CTkLabel(master=frame_left,
-                                              text=username,
-                                              text_font=("Roboto Medium", -16))  # font name and size in px
+                                              text=username)  # font name and size in px
         label_1.grid(row=2, column=0, pady=10, padx=10)
 
         button_2 = customtkinter.CTkButton(master=frame_left,

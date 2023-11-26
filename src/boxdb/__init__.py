@@ -26,5 +26,8 @@ from boxdb.create import *
 from boxdb.rows import *
 from boxdb.basic_commands import *
 from boxdb.auth import *
-from boxdb.logs import showlogs
 from boxdb.columns import *
+from boxdb.logs import showlogs
+from boxdb.checkups import empty_table
+from boxdb.Table_data import *
+from boxdb.data_cond import *

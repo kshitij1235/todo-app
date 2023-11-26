@@ -1,120 +1,156 @@
 '''
-boxdb/basic_commands -> v0.9
+boxdb/basic_commands -> v1.0
 
 This file contain code for
 1)row,column creation and deletion
 2)and gettting table
 
-[ ] add_row() made more faster
-[ ] drop_primary_key()->added
-[ ] assign_primary_key()->added
+get_table() -> Added word buffer
 '''
 
-
-from filemod import writer
+import asyncio
+from boxdb.core import writer
 from tabulate import tabulate
-from boxdb.settings import PRIMARY_KEY,COLUMNS
-from boxdb.support import get_content, get_primary_column, get_columns, AddFlagsToColumns
-from boxdb.checkups import column_exists, primary_key_exists, check_priamary_column, table_struture_exists,check_table
+from boxdb.settings import PRIMARY_KEY
+from boxdb.readtable import row_table,row__multiple_table
+from boxdb.support import (get_primary_column,
+get_columns,
+AddFlagsToColumns,
+get_view_column,
+get_view_table )
+
+from boxdb.checkups import (column_exists,
+primary_key_exists,
+check_priamary_column,
+check_table)
+
 from boxdb.FileWriteup import write_element_in_primary
 from boxdb.logs import logWarning, loginfo, logerror
 
 
-def get_table(table_name, columns=None):
+#TODO row_limit need to be implemented
+
+def get_table(database,
+table_name,
+data=None,
+columns=None,
+Display=True,
+index='always',
+style="texttile",
+row_limiit=None,
+word_buffer=None
+):
     """
     It is used to display table in terminal or even filture
     out some rows according to the convience
     """
-    # FIXME performance impromvement is needed
-
-    table = []
     
-    if not check_table(table_name):
-        return False
+    if data is not None :
+        columns= get_columns(database,table_name)
+        return tabulate(data, headers=columns, showindex=index, tablefmt=style)
 
     if columns is None:
-        columns = get_columns(table_name)
+        columns= get_columns(database,table_name)
+    lazy_data=asyncio.run(row_table(database,table_name,columns,limit_row=row_limiit,word_buffer=word_buffer))
 
-    # get the number of columns
-    content = get_columns(table_name)
+    #LAZY_DATA is false when no data in table
+    if lazy_data is False:
+        return False
+    
+    if not Display: 
+        return lazy_data
 
-    if not table_struture_exists(table_name):
+    processed = AddFlagsToColumns(database,table_name, columns)
+    
+    return tabulate(lazy_data, headers=processed, showindex=index, tablefmt=style)
+
+def display_data(data,
+database=None,
+table_name=None,
+columns=None,
+index='always',
+style="texttile",
+):
+    """
+    It is used to print data 
+    """
+    columns=[]
+    if data is not None:
+        if database and table_name is not None:
+            columns= get_columns(database,table_name)
+        else:
+            columns = [f"columns_{i}" for i in range(len(data[0]))]
+        return tabulate(data, headers=columns, showindex=index, tablefmt=style)
+
+def get_view(database,
+view_name,
+index='always',
+style="texttile",
+row_limiit=None,
+word_buffer=None
+):
+    """
+    It is used to get table 
+    """
+    
+    columns= get_view_column(database,view_name)
+    table_names=get_view_table(database,view_name)
+    lazy_data=asyncio.run(row__multiple_table(database,table_names,columns,limit_row=row_limiit,word_buffer=word_buffer))
+
+    #LAZY_DATA is false when no data in table
+    if lazy_data is False:
         return False
 
-    # if no column input assume it to be content
-    if columns != []:
-        content = columns
-
-    # get the amount of rows in column and calculate the higest
-    for column in content:
-        row_content = get_content(
-            f"{column}.txt", COLUMNS(table_name,column))
-        table.append(row_content)
-    higest_col = max(map(len, table))
-
-    # filter the empty or half filled list to replace with null
-    for item in table:
-        if len(item) < higest_col:
-            for _ in range(higest_col):
-                if len(item) != higest_col:
-                    item.append("null")
-
-    # gets all the indivisual rows
-
-    result = [[table[j][i]
-               for j in range(len(table))] for i in range(len(table[0]))]
-
-    # column tag to represent primary_keys
-    # FIXME temperory fix for flags allocation
-    processed = AddFlagsToColumns(table_name, content)
-
-    print(tabulate(result, headers=processed, showindex='always', tablefmt="fancy_grid"),
-          f"\nTable config = {len(get_columns(table_name))}x{higest_col}")
-    return True
+    # processed = AddFlagsToColumns(database,view_name, columns)
+    return tabulate(lazy_data, headers=columns, showindex=index, tablefmt=style)
 
 
-def drop_primary_key(table_name):
+
+def drop_primary_key(database,table_name):
     """
     Remove primary key from the flag file
     """
-    if not check_table(table_name):
+    if not check_table(database,table_name):
         return False
 
-    priamary_key = primary_key_exists(table_name)
+    priamary_key = primary_key_exists(database,table_name)
     if not priamary_key:
-        logerror(table_name, "PRIMARY KEY : does not exists")
+        logerror(database,table_name, "PRIMARY KEY : does not exists")
         return False
     loginfo(table_name, "PRIMARY KEY : droped sucessfully")
-    writer(PRIMARY_KEY(table_name), '', 'w')
+    writer(PRIMARY_KEY(database,table_name), '', 'w')
     return True
 
 
-def assign_primary_key(table_name, column):
+def assign_primary_key(database,table_name, column):
     """
     Assign primary key in the flag file
     """
-    if not check_table(table_name):
+    if not check_table(database,table_name):
         return False
 
-    primary_key = get_primary_column(table_name)
+    primary_key = get_primary_column(database,table_name)
+
     if column == primary_key:
         logWarning(
             table_name, f"PRIMARY KEY: {column} is already a primary key")
         return False
 
-    if not check_priamary_column(table_name, primary_key):
+    if not check_priamary_column(database,table_name, primary_key):
         logerror(
             table_name, "PRIMARY KEY: cannot make it a primary column due to dublication")
         return False
 
-    if not column_exists(table_name, column):
-        logerror(table_name, f"COLUMN : column {column} not in table")
+    if not column_exists(database,table_name, column):
+        logerror(database,table_name, f"COLUMN : column {column} not in table")
         return False
 
     if primary_key is None:
+        write_element_in_primary(database,table_name, column)
         loginfo(
-            table_name, f"COLUMN : sucessfully assigned {column} as primary key")
-        write_element_in_primary(table_name, column)
+            table_name, 
+            f"COLUMN : sucessfully assigned {column} as primary key"
+            )
         return True
-    logerror(table_name, "COLUMN : primary key already present")
+    logerror(database,table_name, "COLUMN : primary key already present")
     return False

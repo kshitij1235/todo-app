@@ -1,0 +1,5 @@
+{ 
+ task : str
+ data : str
+ status : str
+}

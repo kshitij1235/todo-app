@@ -51,7 +51,7 @@ username):
     cleaned = [item for item in frames if not isinstance(item,list)]
     for i in cleaned:
         i.destroy()
-
+    
     render_todo(frame_right,
     data,
     username)
